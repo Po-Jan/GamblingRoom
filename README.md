@@ -30,5 +30,3 @@ Welcome to the **Plinko Gambling Demo Game** — a browser-based PHP and JavaScr
 - **Backend:** PHP (session handling, login logic)
 - **Data:** Hardcoded multiplier tables per risk level and row count
 
-## 📁 File Structure
-
