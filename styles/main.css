@@ -1,0 +1,107 @@
+/* Reset and base layout */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to right, #1f1c2c, #928dab);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Container for the whole form */
+.container {
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.05),
+                0 0 40px rgba(255, 255, 255, 0.05);
+    width: 90%;
+    max-width: 420px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Main heading */
+.title {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    color: #21bb26;
+    letter-spacing: 1.2px;
+    font-weight: 600;
+
+}
+
+/* Each group of label + input */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #ddd;
+}
+
+/* Input styling */
+.input-text,
+.input-number {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-text:focus,
+.input-number:focus {
+    border-color: #21bb26;
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 8px #00ffc855;
+}
+
+/* Error message */
+.error-msg {
+    font-size: 0.9rem;
+    color: #ff4d4d;
+    margin-top: 4px;
+    display: block;
+}
+
+/* Submit button */
+.btn-start {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    /* background: linear-gradient(90deg, #21bb26, #2ae0ff); */
+    background: #21bb26;
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    box-shadow: 0 0 10px #21bb26;
+}
+
+.btn-start:hover {
+    background: linear-gradient(90deg, #2affca, #21bb26);
+    transform: scale(1.02);
+    box-shadow: 0 0 15px #21bb26;
+}
