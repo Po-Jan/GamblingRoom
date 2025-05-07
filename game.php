@@ -1,11 +1,13 @@
 <?php
 session_start();
 
-// Ensure player is logged in
-if (!isset($_SESSION['playerName'], $_SESSION['balance'])) {
+if (!isset($_SESSION['playerData'])) {
     header('Location: index.php');
     exit;
 }
+
+$playerName = $_SESSION['playerData']['playerName'];
+$playerBalance = $_SESSION['playerData']['currentBalance'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +22,7 @@ if (!isset($_SESSION['playerName'], $_SESSION['balance'])) {
 <body>
     <div class="leftContainterFull">
         <div class="nameDiv">
-            <span>User: <?php echo htmlspecialchars($_SESSION['playerName']); ?></span>
+                <span>User: <?= htmlspecialchars($playerName) ?></span>
         </div>
         <div class="containerData">
             <label id="riskSelectLabel" for="riskSelect">Risk:</label>
@@ -48,7 +50,7 @@ if (!isset($_SESSION['playerName'], $_SESSION['balance'])) {
     </div>
     <div class="rightContainerFull">
         <div class="balanceDiv">
-            <span>Balance: $<?php echo number_format((float)$_SESSION['balance'], 2); ?></span>
+                <span>Balance: $<?= number_format($playerBalance, 2) ?></span>
         </div>
         <div class="containerGame">
             <canvas id="gameCanvas" width="700" height="700"></canvas>
@@ -56,8 +58,8 @@ if (!isset($_SESSION['playerName'], $_SESSION['balance'])) {
     </div>
 
     <script>
-        const playerName = "<?php echo htmlspecialchars($_SESSION['playerName']); ?>";
-        let playerBalance = <?php echo (float)$_SESSION['balance']; ?>;
+        const playerName = "<?= htmlspecialchars($playerName) ?>";
+        let playerBalance = <?= (float)$playerBalance ?>;
         
         // Update balance display initially
         document.querySelector('.balanceDiv span').textContent = `Balance: $${playerBalance.toFixed(2)}`;

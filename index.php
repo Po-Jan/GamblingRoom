@@ -1,26 +1,36 @@
 <?php
 session_start();
 
-// Reset session variables when arriving at index page
-$_SESSION = []; // Clear all session variables
-$playerName = 'Guest'; // Default name
-$playerBalance = 100; // Default balance
+// Initialize session variables if they don't exist
+if (!isset($_SESSION['playerData'])) {
+    $_SESSION['playerData'] = [
+        'playerName' => 'Guest',
+        'startingBalance' => 100,
+        'currentBalance' => 100,
+        'currentBet' => 0,
+        'lastResult' => 0
+    ];
+}
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['start'])) {
-    $_SESSION['playerName'] = htmlspecialchars($_POST['player'] ?? 'Guest');
-    $_SESSION['balance'] = (int)($_POST['balance'] ?? 100);
+    // Update player data in session
+    $_SESSION['playerData']['playerName'] = htmlspecialchars($_POST['player'] ?? 'Guest');
     
-    // Validate balance range (not negative and not over 25000)
-    if ($_SESSION['balance'] < 0) {
-        $_SESSION['balance'] = 0;
-    } elseif ($_SESSION['balance'] > 25000) {
-        $_SESSION['balance'] = 25000;
-    }
+    // Validate and set balance
+    $balance = (int)($_POST['balance'] ?? 100);
+    $balance = max(0, min($balance, 25000)); // Clamp between 0 and 25000
+    
+    $_SESSION['playerData']['startingBalance'] = $balance;
+    $_SESSION['playerData']['currentBalance'] = $balance;
     
     header('Location: game.php');
     exit;
 }
+
+// Extract variables for form display
+$playerName = $_SESSION['playerData']['playerName'];
+$playerBalance = $_SESSION['playerData']['startingBalance'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['start'])) {
             <div class="form-group">
                 <label for="initial-balance">Starting Balance ($):</label>
                 <input type="number" name="balance" id="initial-balance" class="input-number" 
-                       value="<?= $playerBalance ?>" min="0" required>
+                       value="<?= $playerBalance ?>" min="0" max="25000" required>
                 <span id="balance-warning" class="error-msg">Balance must be between $0 and $25,000.</span>
             </div>
 
