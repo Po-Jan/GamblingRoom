@@ -13,7 +13,7 @@ const canvas = document.getElementById('gameCanvas');
     const horizontalFriction = 0.4;
     const verticalFriction = 0.8;
     let balls = [];
-
+    let animationId = null;
     let currentBet = 0;
     let isRoundInProgress = false;
     let ballsInPlay = 0;
@@ -534,7 +534,6 @@ function addBall() {
       
       // Clear input but remember value
       amountInput.dataset.lastValue = amountInput.value;
-      amountInput.value = '';
   }
   
 
@@ -613,10 +612,44 @@ document.getElementById('dropBallBtn').addEventListener('click', addBall);
       balls.forEach(ball => ball.update());
       draw();
       
-      requestAnimationFrame(update);
+      // Store the animation ID so we can cancel it
+      animationId = requestAnimationFrame(update);
     }
-
+    
+    // Modify your updateGameSettings function:
+    function updateGameSettings() {
+      // Cancel any existing animation loop
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+      
+      // Recreate obstacles and sinks
+      obstacles.length = 0;
+      sinks.length = 0;
+      
+      createObstacles();
+      const sinkWidth = 36;
+      sinks.push(...createSinks(rows, numberOffsetY, numberOffsetX, sinkWidth, obstacleRadius));
+      
+      // Update multipliers based on current settings
+      assignMultipliersToSinks(rows, riskLevel);
+      
+      // Reset balls
+      balls = [];
+      
+      // Start a new animation loop
+      update();
+    }
+    
+    // Also modify your initGame function:
     function initGame() {
+      // Cancel any existing animation loop
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+      
       obstacles.length = 0;
       sinks.length = 0;
       balls.length = 0;
@@ -626,7 +659,7 @@ document.getElementById('dropBallBtn').addEventListener('click', addBall);
       sinks.push(...createSinks(rows, numberOffsetY, numberOffsetX, sinkWidth, obstacleRadius));
       assignMultipliersToSinks(rows, riskLevel);
       
-      updateBalanceDisplay(); // Initialize balance display
-      update();
+      updateBalanceDisplay();
+      update(); // Start the animation loop
     }
     initGame();

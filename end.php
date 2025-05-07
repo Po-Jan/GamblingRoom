@@ -85,13 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ?></pre>
             </div>
             
-            <div class="summary">
-                <h2>Summary</h2>
-                <p><strong>Player:</strong> <?php echo $_SESSION["playerName"]; ?></p>
-                <p><strong>Final Balance:</strong> $<?php echo number_format($_SESSION["balance"], 2); ?></p>
-                <p><strong>Last Result:</strong> $<?php echo number_format($_SESSION["lastResult"], 2); ?></p>
-                <p><strong>Cash Out Time:</strong> <?php echo $_SESSION["cashOutTime"]; ?></p>
-            </div>
+            
         <?php else : ?>
             <p>No game data available. Please play the game first.</p>
         <?php endif; ?>

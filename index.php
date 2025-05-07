@@ -1,20 +1,21 @@
 <?php
 session_start();
 
-// Initialize or retrieve player data
-$playerName = $_SESSION['playerName'] ?? 'Guest';
-$playerBalance = $_SESSION['balance'] ?? 100; // Default balance
+// Reset session variables when arriving at index page
+$_SESSION = []; // Clear all session variables
+$playerName = 'Guest'; // Default name
+$playerBalance = 100; // Default balance
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['start'])) {
     $_SESSION['playerName'] = htmlspecialchars($_POST['player'] ?? 'Guest');
     $_SESSION['balance'] = (int)($_POST['balance'] ?? 100);
     
-    // Validate balance range
-    if ($_SESSION['balance'] < 10) {
-        $_SESSION['balance'] = 10;
-    } elseif ($_SESSION['balance'] > 10000) {
-        $_SESSION['balance'] = 10000;
+    // Validate balance range (not negative and not over 25000)
+    if ($_SESSION['balance'] < 0) {
+        $_SESSION['balance'] = 0;
+    } elseif ($_SESSION['balance'] > 25000) {
+        $_SESSION['balance'] = 25000;
     }
     
     header('Location: game.php');
@@ -56,8 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['start'])) {
             <div class="form-group">
                 <label for="initial-balance">Starting Balance ($):</label>
                 <input type="number" name="balance" id="initial-balance" class="input-number" 
-                       value="<?= $playerBalance ?>" required>
-                <span id="balance-warning" class="error-msg">Balance cannot exceed $10,000.</span>
+                       value="<?= $playerBalance ?>" min="0" required>
+                <span id="balance-warning" class="error-msg">Balance must be between $0 and $25,000.</span>
             </div>
 
             <input type="submit" name="start" class="btn-start" value="Enter the Game">
@@ -69,18 +70,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['start'])) {
         const warning = document.getElementById("balance-warning");
 
         balanceInput.addEventListener("input", function() {
-            const maxBalance = 10000;
+            const maxBalance = 25000;
             const value = parseInt(this.value) || 0;
             
-            if (value > maxBalance) {
+            if (value < 0) {
+                this.value = 0;
+                warning.style.display = "inline";
+            } else if (value > maxBalance) {
                 this.value = maxBalance;
                 warning.style.display = "inline";
             } else {
                 warning.style.display = "none";
-            }
-
-            if (this.value.length > 5) {
-                this.value = this.value.slice(0, 5);
             }
         });
 
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['start'])) {
         // Validate on form submit
         document.querySelector('.player-form').addEventListener('submit', function(e) {
             const balance = parseInt(balanceInput.value);
-            if (isNaN(balance) || balance < 10 || balance > 10000) {
+            if (isNaN(balance) || balance < 0 || balance > 25000) {
                 e.preventDefault();
                 balanceInput.focus();
                 warning.style.display = "inline";
