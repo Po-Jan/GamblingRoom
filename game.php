@@ -17,9 +17,11 @@ $playerBalance = $_SESSION['playerData']['currentBalance'];
     <title>Plinko Game</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="styles/game.css">
-    <link rel="icon" href="assets/favIcon.png" type="image/x-icon">
+    <link rel="icon" href="assets/plinko.png" type="image/x-icon">
 </head>
 <body>
+    <div class="header"></div>
+<div class="body">
     <div class="leftContainterFull">
         <div class="nameDiv">
                 <span>User: <?= htmlspecialchars($playerName) ?></span>
@@ -56,6 +58,7 @@ $playerBalance = $_SESSION['playerData']['currentBalance'];
             <canvas id="gameCanvas" width="700" height="700"></canvas>
         </div>
     </div>
+</div>
 
     <script>
         const playerName = "<?= htmlspecialchars($playerName) ?>";
